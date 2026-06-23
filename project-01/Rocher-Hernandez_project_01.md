@@ -150,7 +150,7 @@ ggplot(hourly_traffic,
   theme_minimal()
 ```
 
-<img src="[https://raw.githubusercontent.com/aalhamadani/dataviz_final_project/main/figures/tpa_max_temps_facet.pn](https://github.com/AntonioRocher/dataviz_final_project/blob/215d2364fcdfce284a44b3ca7a20335eabdadd15/Figures/Avg_Traffic_Volume_by_Hour.png)" width="80%" style="display: block; margin: auto;" />
+<img src="../Figures/Avg_Traffic_Volume_by_Hour.png" width="80%" style="display: block; margin: auto;" />
 
 ```
 ## Warning: Removed 1 row containing missing values or values outside the scale range
