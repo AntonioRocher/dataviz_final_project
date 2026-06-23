@@ -44,8 +44,6 @@ Using the 2022 data:
 
 (a) Create a plot like the one below:
 
-<img src="https://raw.githubusercontent.com/aalhamadani/dataviz_final_project/main/figures/tpa_max_temps_facet.png" alt="" width="80%" style="display: block; margin: auto;" />
-
 
 
 ``` r
@@ -80,8 +78,6 @@ Hint: the option `binwidth = 3` was used with the `geom_histogram()` function.
 
 (b) Create a plot like the one below:
 
-<img src="https://raw.githubusercontent.com/aalhamadani/dataviz_final_project/main/figures/tpa_max_temps_density.png" alt="" width="80%" style="display: block; margin: auto;" />
-
 
 
 ``` r
@@ -107,8 +103,6 @@ Hint: check the `kernel` parameter of the `geom_density()` function, and use `bw
 
 (c) Create a plot like the one below:
 
-<img src="https://raw.githubusercontent.com/aalhamadani/dataviz_final_project/main/figures/tpa_max_temps_density_facet.png" alt="" width="80%" style="display: block; margin: auto;" />
-
 
 
 ``` r
@@ -124,9 +118,6 @@ ggplot(weather_tpa, aes(x = max_temp)) +
 Hint: default options for `geom_density()` were used. 
 
 (d) Generate a plot like the chart below:
-
-
-<img src="https://raw.githubusercontent.com/aalhamadani/dataviz_final_project/main/figures/tpa_max_temps_ridges_plasma.png" alt="" width="80%" style="display: block; margin: auto;" />
 
 
 
@@ -260,8 +251,6 @@ Standard concrete mixes need anywhere from 150 kg/m³ to 450 kg/m³ of cement de
 
 2. Use a _temporal_ indicator such as the one available in the variable `Age` (measured in days). Generate a plot similar to the one shown below. Comment on your results.
 
-<img src="https://raw.githubusercontent.com/aalhamadani/dataviz_final_project/main/figures/concrete_strength.png" alt="" width="80%" style="display: block; margin: auto;" />
-
 
 
 ``` r
@@ -288,8 +277,6 @@ The plot shows that concrete strength increases as the concrete gets older. The 
 There is also some variation in strength at the same age. This represents the importance of age, but other factors such as the ingredients used in the concrete mix can also affect the final strength. The graph shows a positive relationship between age and compressive strength, with older concrete tending to be stronger than younger concrete.
 
 3. Create a scatterplot similar to the one shown below. Pay special attention to which variables are being mapped to specific aesthetics of the plot. Comment on your results. 
-
-<img src="https://raw.githubusercontent.com/aalhamadani/dataviz_final_project/main/figures/cement_plot.png" alt="" width="80%" style="display: block; margin: auto;" />
 
 
 ``` r
