@@ -1,0 +1,147 @@
+---
+title: "Data Visualization - Mini-Project 1"
+author: "Antonio Rocher-Hernandez `arocherhernandez132@floridapoly.edu`"
+output:
+  html_document:
+    df_print: paged
+---
+
+# Libraries
+
+```{r}
+library(tidyverse)
+library(lubridate)
+
+traffic <- read_csv("../data/trafficMN.csv")
+```
+
+# Exploring the Data
+
+## Data Structure
+
+```{r}
+glimpse(traffic)
+```
+
+## Summary
+
+```{r}
+traffic_summary <- traffic %>%
+  summarize(
+    Observations = n(),
+    Avg_Traffic = round(mean(traffic_volume, na.rm = TRUE), 2),
+    Min_Traffic = min(traffic_volume, na.rm = TRUE),
+    Max_Traffic = max(traffic_volume, na.rm = TRUE),
+    Avg_Temperature = round(mean(temp, na.rm = TRUE), 2)
+  )
+
+traffic_summary
+```
+
+## Missing Values
+
+```{r}
+colSums(is.na(traffic))
+```
+### Discussion
+
+The dataset has data on traffic volume measurements, weather, and dates. There are no missing values.
+
+# Data Preparation
+
+```{r}
+traffic <- traffic %>%
+  mutate(
+    date_time = ymd_hms(date_time),
+    hour = hour(date_time),
+    weekday = wday(date_time, label = TRUE)
+  )
+```
+
+I made some additional variable to simplify the analysis
+
+# Graph 1: Traffic Volume by Hour
+
+```{r}
+hourly_traffic <- traffic %>%
+  group_by(hour) %>%
+  summarize(avg_traffic = mean(traffic_volume))
+
+ggplot(hourly_traffic,
+       aes(hour, avg_traffic)) +
+  geom_line() +
+  geom_point() +
+  labs(
+    title = "Average Traffic Volume by Hour",
+    x = "Hour of Day",
+    y = "Average Traffic Volume"
+  ) +
+  theme_minimal()
+```
+### Interpretation
+
+It appears that traffic volume increases during the morning and reaches the maximum during the evening. The volume decreases as midnight approaches.
+
+# Graph 2: Traffic Volume by Weekday
+
+```{r}
+weekday_traffic <- traffic %>%
+  group_by(weekday) %>%
+  summarize(avg_traffic = mean(traffic_volume))
+
+ggplot(weekday_traffic,
+       aes(weekday, avg_traffic)) +
+  geom_col() +
+  labs(
+    title = "Average Traffic Volume by Weekday",
+    x = "Weekday",
+    y = "Average Traffic Volume"
+  ) +
+  theme_minimal()
+```
+
+### Interpretation
+
+According to the graph, weekdays generally show higher traffic volume than weekends, which can be supported by having to travel to work during weekdays.
+
+# Graph 3: Traffic Volume by Weather Condition
+
+```{r}
+weather_traffic <- traffic %>%
+  group_by(weather_main) %>%
+  summarize(avg_traffic = mean(traffic_volume))
+
+ggplot(weather_traffic,
+       aes(reorder(weather_main, avg_traffic),
+           avg_traffic)) +
+  geom_col() +
+  coord_flip() +
+  labs(
+    title = "Average Traffic Volume by Weather",
+    x = "Weather Condition",
+    y = "Average Traffic Volume"
+  ) +
+  theme_minimal()
+```
+
+### Interpretation
+
+This graph shows how different weather conditions influence traffic volume. The traffic volumes seems to decrease the worse the weather is.
+
+# Discussion
+
+## What were the original charts you planned to create?
+
+I planned to create charts showing traffic volume by hour, weekday, and weather conditions. I feel like these variables seemed most likely to reveal useful traffic patterns.
+
+## What story could you tell with your plots?
+
+The plots show that traffic volume follows predictable commuting patterns. Traffic is highest during the weekday on work hours and lower during the weekends. The weather conditions also seem to influence traffic levels.
+
+## How did you apply the principles of data visualization and design?
+
+I selected chart types that are appropriate for the data being shown. Line charts were used for trends based on time, while bar graphs were used for comparisons between categories. I added clear labels, titles, and a minimal theme to improve readability.
+
+# Conclusion
+
+This analysis shows how traffic volume changes based on time and environmental conditions. The graphs showed clear commuting patterns and highlighted factors that may affect traffic.
