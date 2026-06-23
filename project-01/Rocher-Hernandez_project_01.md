@@ -186,6 +186,8 @@ ggplot(weekday_traffic,
   theme_minimal()
 ```
 
+<img src="../Figures/Avg_Traffic_Volume_by_Weekday.png" width="80%" style="display: block; margin: auto;" />
+
 ![](Project1_analysis_data_viz_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
 
 ### Interpretation
@@ -212,6 +214,9 @@ ggplot(weather_traffic,
   ) +
   theme_minimal()
 ```
+
+
+<img src="../Figures/Avg_Traffic_Volume_by_Weather.png" width="80%" style="display: block; margin: auto;" />
 
 ![](Project1_analysis_data_viz_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
 
