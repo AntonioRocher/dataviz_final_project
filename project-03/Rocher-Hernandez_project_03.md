@@ -72,7 +72,7 @@ ggplot(weather_tpa, aes(x = max_temp)) +
 
 ![](Rocher-Hernandez_project_03_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
 
-
+<img src="../Figures/tpa_max_temps_facet.png" width="80%" style="display: block; margin: auto;" />
 
 Hint: the option `binwidth = 3` was used with the `geom_histogram()` function.
 
@@ -98,6 +98,7 @@ ggplot(weather_tpa, aes(x = max_temp)) +
 
 ![](Rocher-Hernandez_project_03_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
 
+<img src="../Figures/Density_of_Daily_Maximum_Temperatures.png" width="80%" style="display: block; margin: auto;" />
 
 Hint: check the `kernel` parameter of the `geom_density()` function, and use `bw = 0.5`.
 
@@ -114,6 +115,7 @@ ggplot(weather_tpa, aes(x = max_temp)) +
 
 ![](Rocher-Hernandez_project_03_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
 
+<img src="../Figures/tpa_max_temps_density_facet.png" width="80%" style="display: block; margin: auto;" />
 
 Hint: default options for `geom_density()` were used. 
 
@@ -151,6 +153,7 @@ ggplot(weather_tpa,
 
 ![](Rocher-Hernandez_project_03_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
 
+<img src="../Figures/tpa_max_temps_ridges_plasma.png" width="80%" style="display: block; margin: auto;" />
 
 Hint: use the`{ggridges}` package, and the `geom_density_ridges()` function paying close attention to the `quantile_lines` and `quantiles` parameters. The plot above uses the `plasma` option (color scale) for the _viridis_ palette.
 
@@ -174,7 +177,7 @@ ggplot(weather_tpa,
 
 ![](Rocher-Hernandez_project_03_files/figure-html/unnamed-chunk-10-1.png)<!-- -->
 
-
+<img src="../Figures/Monthly_Precipitation_Distribution.png" width="80%" style="display: block; margin: auto;" />
 
 ## PART 2 
 
@@ -232,7 +235,7 @@ ggplot(concrete, aes(Cement)) +
 
 ![](Rocher-Hernandez_project_03_files/figure-html/unnamed-chunk-13-1.png)<!-- -->
 
-
+<img src="../Figures/Cement_vs._Count.png" width="80%" style="display: block; margin: auto;" />
 
 ``` r
 ggplot(concrete, aes(Water)) +
@@ -243,6 +246,8 @@ ggplot(concrete, aes(Water)) +
 ```
 
 ![](Rocher-Hernandez_project_03_files/figure-html/unnamed-chunk-14-1.png)<!-- -->
+
+<img src="../Figures/Water_vs._Count.png" width="80%" style="display: block; margin: auto;" />
 
 Comment:
 
@@ -268,6 +273,8 @@ ggplot(new_concrete,
     fill = "Strength Range"
   )
 ```
+
+<img src="../Figures/Concrete_Compressive_Strength_by_Age.png" width="80%" style="display: block; margin: auto;" />
 
 ![](Rocher-Hernandez_project_03_files/figure-html/unnamed-chunk-16-1.png)<!-- -->
 Comment:
@@ -302,6 +309,8 @@ ggplot(new_concrete,
     plot.caption = element_text(hjust = 1, size = 10) 
   )
 ```
+
+<img src="../Figures/Exploring_Strength_vs._Cement_Age_Water.png" width="80%" style="display: block; margin: auto;" />
 
 ![](Rocher-Hernandez_project_03_files/figure-html/unnamed-chunk-18-1.png)<!-- -->
 
