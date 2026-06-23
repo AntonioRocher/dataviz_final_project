@@ -1,0 +1,195 @@
+---
+title: "Data Visualization - Mini-Project 2"
+author: "Antonio Rocher-Hernandez `arocher-hernandez132@floridapoly.edu`"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, fig.width = 9, fig.height = 6)
+library(tidyverse)
+library(plotly)
+library(sf)
+library(maps)
+library(ggspatial)
+library(broom)
+library(ggthemes)
+```
+
+
+# Loading data
+```{r}
+weather_data <- read_csv("../data/atl-weather.csv")
+
+births_data <- read_csv("../data/us_births_00_14.csv")
+```
+
+# Clean Data
+```{r}
+weather_clean <- weather_data %>%
+  mutate(date = as.Date(time))
+
+births_clean <- births_data %>%
+  mutate(
+    day_of_week = factor(day_of_week, levels = c("Mon", "Tues", "Wed", "Thurs", "Fri", "Sat", "Sun")),
+    month = factor(month, levels = 1:12, labels = month.abb)
+  )
+```
+
+
+### Plot 1: Interactive Weather Exploration
+```{r}
+library(htmlwidgets)
+
+p1 <- ggplot(weather_clean, aes(x = humidity, y = temperatureHigh, text = paste("Date:", date, "<br>High Temp:", temperatureHigh, "F<br>Humidity:", humidity))) +
+  geom_point(aes(color = cloudCover), alpha = 0.7, size = 2) +
+  scale_color_viridis_c(option = "plasma") +
+  theme_minimal(base_family = "sans") +
+  labs(
+    title = "Atlanta Weather: Temperature vs. Humidity (2019)",
+    x = "Relative Humidity (Decimal)",
+    y = "Maximum Daily Temperature (°F)",
+    color = "Cloud Cover"
+  ) +
+  theme(
+    plot.title = element_text(face = "bold", size = 14),
+    legend.position = "right"
+  )
+
+# Convert to an interactive plotly object
+p1_interactive <- ggplotly(p1, tooltip = "text")
+
+# Display the plot in the report
+p1_interactive
+
+# Save a standalone, self-contained HTML copy to your project directory
+saveWidget(p1_interactive, "atl-weather-interactive.html", selfcontained = TRUE)
+```
+
+
+
+This plot presents a scatter plot contrasting relative humidity (x-axis) with daily maximum temperatures (y-axis) across 365 days of 2019 in Atlanta. Points are dynamically colored by continuous cloud cover using a high-contrast palette.As relative humidity climbs toward saturation (>80%), the maximum temperatures decreases significantly. The color gradient highlights that clear sky days (low cloud cover) cluster tightly around low-humidity and high-temperature periods, while full overcast conditions occur during cooler days.
+
+
+### Plot 2: Regional Spatial Distribution of Precipitation
+
+
+```{r plot_2_spatial_anomalies_final_render}
+# Load Georgia County map boundaries from the maps/sf packages
+ga_counties <- st_as_sf(map("county", "georgia", plot = FALSE, fill = TRUE))
+
+# Just have the 8 core greater Atlanta municipal county boundaries
+metro_atl_names <- c("fulton", "dekalb", "gwinnett", "cobb", "clayton", "cherokee", "henry", "douglas")
+metro_counties <- ga_counties %>%
+  filter(tolower(ID) %in% paste0("georgia,", metro_atl_names))
+
+# Compute precipitation anomaly factors
+regional_baseline_precip <- median(weather_clean$precipIntensity, na.rm = TRUE)
+
+weather_anomalies <- weather_clean %>%
+  filter(precipIntensity > regional_baseline_precip) %>%
+  mutate(
+    Quarter = case_when(
+      month(date) %in% 1:3   ~ "Q1: Winter-Spring Transition",
+      month(date) %in% 4:6   ~ "Q2: High Moisture/Storms",
+      month(date) %in% 7:9   ~ "Q3: Late Summer Convection",
+      TRUE                   ~ "Q4: Autumn-Winter Inversion"
+    )
+  ) %>%
+  dplyr::group_by(Quarter) %>%
+  dplyr::summarize(
+    MaxPrecipAnomaly = max(precipIntensity - regional_baseline_precip, na.rm = TRUE),
+    MeanWindGust = mean(windGust, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+# Cross-join the counties with the anomalies dataset
+spatial_anomalies_merged <- metro_counties %>%
+  cross_join(weather_anomalies)
+
+# Plot the map with fixed border
+ggplot(data = spatial_anomalies_merged) +
+  geom_sf(aes(fill = MaxPrecipAnomaly), color = "#d1d5db", size = 0.5) +
+  scale_fill_viridis_c(option = "viridis", name = "Precip Deviation\n(Inches/Hr Above Median)") +
+  
+  # Clean up overlapping grid labels by specifying breaks
+  scale_x_continuous(breaks = c(-84.6, -84.2, -83.8)) +
+  
+  facet_wrap(~Quarter, nrow = 2) +
+  theme_minimal() +
+  labs(
+    title = "Localized Severe Storm Vectors & Precipitation Anomalies",
+    subtitle = "Mapping maximum departures from standard baseline precipitation across Metro Atlanta borders",
+    x = "Longitude",
+    y = "Latitude"
+  ) +
+  theme(
+    plot.title = element_text(face = "bold", size = 13),
+    plot.subtitle = element_text(size = 10, face = "italic", color = "#4a5568"),
+    strip.text = element_text(face = "bold", size = 8.5, color = "#2d3748", 
+                              margin = margin(t = 4, r = 0, b = 4, l = 0)),
+    
+    panel.background = element_rect(fill = "#f7fafc", color = NA),
+    legend.position = "right",
+    legend.title = element_text(size = 9, face = "bold"),
+    
+    # Rotate and align x-axis labels to prevent overlapping
+    axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, size = 9)
+  )
+```
+
+
+This plot isolates extreme weather dynamics across Metro Atlanta county corridors. By calculating daily rainfall intensity anomalies (relative to the annual baseline median), we highlight how precipitation events vary geographically across different quarters of the year. This figure shows the eight core municipal counties making up Metro Atlanta. The 365 daily observations are aggregated into structural calendar quarters (Q1–Q4) to map localized precipitation intensity departures from the baseline median. The visual weight shifts between quarters: Q2 (Spring–Summer transition) and Q3 (Late Summer), where specific county corridors have a higher peak rain intensity than others.
+
+
+
+
+
+### Plot 3: Predictive Model Evaluation
+
+
+```{r}
+# Generate predictions and residuals for all 365 observations
+weather_model <- lm(temperatureHigh ~ humidity + cloudCover + pressure, data = weather_clean)
+model_data <- augment(weather_model, data = weather_clean)
+
+ggplot(model_data, aes(x = .fitted, y = temperatureHigh)) +
+  geom_point(aes(color = .resid), size = 2.5, alpha = 0.7) +
+  geom_abline(slope = 1, intercept = 0, color = "black", linetype = "dashed", size = 1) +
+  scale_color_gradient2(low = "#2166ac", mid = "#f7f7f7", high = "#b2182b", name = "Residual Error") +
+  theme_minimal() +
+  labs(
+    title = "Observed vs. Predicted High Temperatures",
+    subtitle = "Evaluating model performance using all 365 data points from the dataset",
+    x = "Model Fitted Values (°F)",
+    y = "Actual High Temperatures (°F)"
+  ) +
+  annotate("text", x = 50, y = 90, label = "Dashed Line = Perfect Prediction", 
+           color = "#333333", size = 4, fontface = "italic") +
+  theme(
+    plot.title = element_text(face = "bold", size = 14),
+    panel.grid.minor = element_blank()
+  )
+```
+
+This graph plots the entire 365-day dataset to contrast the linear model's predictions against the data. Points are colored using a difference between under-predictions vs. over-predictions in relation to the prediction line. In the hot spectrum (red), the data points are close to the diagonal line, meaning high accuracy. However, in the colder spectrum (blue), the points are more scattered and far from the line, meaning that model error increases as temperatures drop.
+
+
+
+# Report
+
+### What were the original charts you planned to create for this assignments? What steps were necessary for cleaning and preparing the data?
+
+I wanted to look into the outliers in the data, which meant doing a lot of data cleaning first. I used as.Date() to change the weather time strings into clean dates, and then I figured out the normal median rainfall for the whole year so I could isolate the rainstorms rather than just showing basic seasonal averages. For the birth data, R wanted to sort the days of the week alphabetically by default, which did not look great on a chart, so I manually reordered them from Monday to Sunday to clearly highlight how births decrease over the weekend as the data shows.
+
+### What story could you tell with your plots? What difficulties did you encounter while creating the visualizations? What additional approaches do you think can be use to explore the data you selected?
+
+Figure 1 shows that Atlanta's hottest days only happen when the humidity drops down low between 30% and 50% on clear-sky days, and I added an interactive feature so you can see the exact dates. Figure 2 uses local county shapefile data to prove that heavy rainstorms do not hit the city evenly; instead, certain places get rainstorms during spring and summer while neighboring counties stay dry. Figure 3 maps out a line to check the math on the model that predicts temperature, it shows that the prediction is mostly right duting hotter seasons while less accurate during colder seasons. The longitude numbers on the bottom were overlapping, the titles were getting chopped off, and the bright yellow colors were washing out the county lines, but I fixed it by tilting the text 45 degrees, shrinking the font sizes, and using a better color scheme.
+
+
+### How did you apply the principles of data visualizations and design for this assignment?
+
+
+I relied on the CRAP and Gestalt rules. I used high contrast to highlight the important elements, like the bold colors in Figure 1 to separate summer from winter. I kept things repetitive in a good way by using the exact same clean background theme for every chart, and I grouped the maps in Figure 2 into a grid so one can easily compare the seasons. I aligned all the labels, text, and keys to the right side so the charts have room and look clean instead of cluttered. Finally, I used the rule of proximity by putting my text annotations right next to the actual dots on plot 1, so you don't have to look back and forth to figure out what you are supposed to be seeing.
+
