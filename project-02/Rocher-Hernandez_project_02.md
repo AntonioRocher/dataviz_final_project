@@ -69,7 +69,7 @@ p1_interactive
 saveWidget(p1_interactive, "atl-weather-interactive.html", selfcontained = TRUE)
 ```
 
-
+<img src="../Figures/Atlanta_Weather-Temp_Vs._Humidity.png" width="80%" style="display: block; margin: auto;" />
 
 This plot presents a scatter plot contrasting relative humidity (x-axis) with daily maximum temperatures (y-axis) across 365 days of 2019 in Atlanta. Points are dynamically colored by continuous cloud cover using a high-contrast palette.As relative humidity climbs toward saturation (>80%), the maximum temperatures decreases significantly. The color gradient highlights that clear sky days (low cloud cover) cluster tightly around low-humidity and high-temperature periods, while full overcast conditions occur during cooler days.
 
@@ -142,6 +142,8 @@ ggplot(data = spatial_anomalies_merged) +
   )
 ```
 
+<img src="../Figures/Localized_Severe_Storm_Vectors_&_Precipitation_Anomalies.png" width="80%" style="display: block; margin: auto;" />
+
 ![](Project2_analysis_data_viz_files/figure-html/plot_2_spatial_anomalies_final_render-1.png)<!-- -->
 
 
@@ -178,6 +180,8 @@ ggplot(model_data, aes(x = .fitted, y = temperatureHigh)) +
     panel.grid.minor = element_blank()
   )
 ```
+
+<img src="../Figures/Observed_Vs._Predicted_High_Temperatures.png" width="80%" style="display: block; margin: auto;" />
 
 ![](Project2_analysis_data_viz_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
 
