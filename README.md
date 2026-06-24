@@ -14,7 +14,7 @@ This chart stands out because it allows users to explore differences between wee
 
 This visualization helped reveal clear commuting patterns, with higher traffic during weekdays and lower traffic on weekends.
 
-<img src="../Figures/Avg_Traffic_Volume_by_Weekday.png" width="70%" height="70%">
+<img src="Figures/Avg_Traffic_Volume_by_Weekday.png" width="70%" height="70%">
 
 
 ## Project 02
@@ -26,7 +26,7 @@ This plot combines multiple variables into a single interactive view. Users can 
 This interactivity makes it easier to understand how temperature and humidity interact across different weather conditions, especially when patterns are dense or overlapping.
 
 
-<img src="../Figures/Atlanta_Weather-Temp_Vs._Humidity.png" width="80%" height="80%">
+<img src="Figures/Atlanta_Weather-Temp_Vs._Humidity.png" width="80%" height="80%">
 
 
 ## Project 03
@@ -38,7 +38,7 @@ This visualization combines multiple dimensions into a single plot while still r
 It also highlights that higher cement and lower water content generally lead to stronger concrete, especially when allowed to cure over time.
 
 
-<img src="../Figures/Exploring_Strength_vs._Cement_Age_Water.png" width="80%" height="80%">
+<img src="Figures/Exploring_Strength_vs._Cement_Age_Water.png" width="80%" height="80%">
 
 
 ### Moving Forward
