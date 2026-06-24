@@ -215,6 +215,37 @@ ggplot(concrete, aes(Water)) +
   theme_minimal()
 ```
 
+Improved Chart:
+
+```{r}
+ggplot(concrete, aes(x = Water)) +
+  geom_histogram(
+    bins = 30,
+    fill = "#4C78A8",
+    color = "white",
+    alpha = 0.9
+  ) +
+  geom_vline(
+    aes(xintercept = mean(Water)),
+    color = "red",
+    linewidth = 1,
+    linetype = "dashed"
+  ) +
+  labs(
+    title = "Distribution of Water Content in Concrete Mixtures",
+    subtitle = "Red dashed line indicates the mean water content",
+    x = "Water (kg/m³)",
+    y = "Number of Concrete Mixes"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(face = "bold", size = 14),
+    plot.subtitle = element_text(size = 10),
+    panel.grid.minor = element_blank()
+  )
+```
+
+
 Comment:
 
 Standard concrete mixes need anywhere from 150 kg/m³ to 450 kg/m³ of cement depending on the target strength. The lower bound is just under 100, which refers to very lean mixes, making this entire range reasonable for a concrete dataset. In concrete mix designs, water content goes from 140 to 210 kg/m³. The nature of the Cement plot and the spikes on the Water plot indicate that this data comes from structured mix designs instead of random environmental sampling.
@@ -255,27 +286,36 @@ knitr::include_graphics("https://raw.githubusercontent.com/aalhamadani/dataviz_f
 ```
 
 ```{r}
-ggplot(new_concrete,
-       aes(x = Cement,
-           y = Concrete_compressive_strength,
-           color = Water,                     
-           size = Age)) +
-  geom_point(alpha = 0.6) +                
-  scale_color_viridis_c(option = "viridis") + 
-  scale_size_continuous(range = c(1, 8)) +   
-  labs(
-    title = "Exploring Strength versus (Cement, Age, and Water)",
-    x = "Cement",
-    y = "Strength",
-    color = "Water",
-    size = "Age",
-    caption = "Age is measured in days"
-  ) +
-  theme_minimal() +
-  theme(
-    plot.title = element_text(size = 16, hjust = 0), 
-    plot.caption = element_text(hjust = 1, size = 10) 
+library(plotly)
+
+p <- ggplot(
+  new_concrete,
+  aes(
+    x = Cement,
+    y = Concrete_compressive_strength,
+    color = Water,
+    size = Age,
+    text = paste(
+      "Cement:", round(Cement, 1), "kg/m³",
+      "<br>Strength:", round(Concrete_compressive_strength, 1), "MPa",
+      "<br>Water:", round(Water, 1), "kg/m³",
+      "<br>Age:", Age, "days"
+    )
   )
+) +
+  geom_point(alpha = 0.6) +
+  scale_color_viridis_c(option = "viridis") +
+  scale_size_continuous(range = c(1, 8)) +
+  labs(
+    title = "Exploring Strength versus Cement, Age, and Water",
+    x = "Cement (kg/m³)",
+    y = "Compressive Strength (MPa)",
+    color = "Water",
+    size = "Age"
+  ) +
+  theme_minimal()
+
+ggplotly(p, tooltip = "text")
 ```
 
 Comment:
