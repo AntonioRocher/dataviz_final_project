@@ -4,15 +4,61 @@
 
 ## Mini-Project 2
 
-This project presents data from a physical climate system (Atlanta Weather, 2019) with an institutional behavioral system (US Birth Rates, 2000–2014) using metrics like daily high temperatures, humidity decimals, cloud cover fractions, and 15 years of national live birth counts. The visualizations uncover that Atlanta's most intense heatwaves occur exclusively within a dry 30% to 50% relative humidity window, while geographic mapping of rainfall anomalies reveals that severe storms act as highly localized vectors.
+This project explores weather patterns in the Atlanta area using temperature, humidity, cloud cover, precipitation, and predictive modeling data. The goal is to identify relationships between weather variables, visualize regional precipitation patterns, and evaluate the accuracy of a weather prediction model.
 
- - 1. Interactive Weather Exploration (Plot 1)
-By plotting humidity against daily high temperatures, we see that Atlanta's hottest days only happen when relative humidity drops low (between 30% and 50%) on clear-sky days. When humidity spikes near 100%, peak temperatures drop off significantly.
+---
 
- - 2. Regional Spatial Distribution of Precipitation (Plot 2)
-By calculating daily rainfall intensity anomalies (relative to the annual baseline median), we highlight how precipitation events vary geographically across different quarters of the year. This figure shows the eight core municipal counties making up Metro Atlanta.
+## Project Overview
 
- - 3. Predictive Model Evaluation (Plot 3)
-Plotted the linear regression formula to see if it could predict daily high temperatures using humidity and cloud cover. Plotting the actual temperatures against what the model predicted showed that the math is accurate during the summer, but gets less accurate in the winter.
+The analysis focuses on three main questions:
 
+* How are temperature, humidity, and cloud cover related?
+* How do precipitation anomalies vary across Metro Atlanta throughout the year?
+* How accurately can weather variables predict daily high temperatures?
 
+---
+
+## Visualizations
+
+### Plot 1: Temperature vs. Humidity (Interactive)
+
+This interactive scatterplot explores the relationship between humidity and daily maximum temperatures. Cloud cover is represented using a viridis palette.
+
+The interactive features allow users to hover over individual points to view the date, temperature, and humidity values. This provides a level of detail that cannot be easily displayed in a static chart.
+
+---
+
+### Plot 2: Regional Distribution of Precipitation Anomalies
+
+This map visualizes precipitation intensity anomalies across Metro Atlanta counties during different quarters of the year. The layout makes it easy to compare seasonal weather patterns and identify periods of increased storm activity.
+
+---
+
+### Plot 3: Predictive Model Evaluation
+
+This visualization compares predicted daily high temperatures against observed temperatures. Residual errors are highlighted using a diverging color scale, allowing viewers to identify where the model performs well and where prediction errors are larger.
+
+---
+
+## Key Findings
+
+* Higher temperatures generally occur on lower-humidity days.
+* Precipitation anomalies vary across seasons, with stronger rainfall events occurring during spring and late summer.
+* The predictive model performs well overall but shows larger errors during cooler weather periods.
+
+---
+
+## Accessibility
+
+All visualizations were designed with accessibility in mind:
+
+* Colorblind-safe palettes such as Viridis and Plasma were used where appropriate.
+* Clear labels, titles, and legends improve readability.
+* Alternative text descriptions are included in the source document using the `fig.alt` option.
+* Information is not communicated through color alone whenever possible.
+
+---
+
+## Conclusion
+
+This project demonstrates how weather data can be explored through both static and interactive visualizations. The combination of exploratory analysis, spatial mapping, and predictive model evaluation provides insight into Atlanta's weather patterns and the effectiveness of weather-based prediction models.
