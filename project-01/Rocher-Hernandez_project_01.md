@@ -150,8 +150,6 @@ ggplot(hourly_traffic,
   theme_minimal()
 ```
 
-<img src="../Figures/Avg_Traffic_Volume_by_Hour.png" width="80%" style="display: block; margin: auto;" />
-
 ```
 ## Warning: Removed 1 row containing missing values or values outside the scale range
 ## (`geom_line()`).
@@ -162,7 +160,7 @@ ggplot(hourly_traffic,
 ## (`geom_point()`).
 ```
 
-![](Project1_analysis_data_viz_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
+![](Rocher-Hernandez_project_01_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
 ### Interpretation
 
 It appears that traffic volume increases during the morning and reaches the maximum during the evening. The volume decreases as midnight approaches.
@@ -171,24 +169,64 @@ It appears that traffic volume increases during the morning and reaches the maxi
 
 
 ``` r
-weekday_traffic <- traffic %>%
-  group_by(weekday) %>%
-  summarize(avg_traffic = mean(traffic_volume))
-
-ggplot(weekday_traffic,
-       aes(weekday, avg_traffic)) +
-  geom_col() +
-  labs(
-    title = "Average Traffic Volume by Weekday",
-    x = "Weekday",
-    y = "Average Traffic Volume"
-  ) +
-  theme_minimal()
+library(dplyr)
+library(plotly)
 ```
 
-<img src="../Figures/Avg_Traffic_Volume_by_Weekday.png" width="80%" style="display: block; margin: auto;" />
+```
+## 
+## Attaching package: 'plotly'
+```
 
-![](Project1_analysis_data_viz_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
+```
+## The following object is masked from 'package:ggplot2':
+## 
+##     last_plot
+```
+
+```
+## The following object is masked from 'package:stats':
+## 
+##     filter
+```
+
+```
+## The following object is masked from 'package:graphics':
+## 
+##     layout
+```
+
+``` r
+weekday_traffic <- traffic %>%
+  group_by(weekday) %>%
+  summarize(avg_traffic = mean(traffic_volume, na.rm = TRUE))
+
+plot_ly(
+  data = weekday_traffic,
+  x = ~weekday,
+  y = ~avg_traffic,
+  type = "bar",
+  hovertemplate = paste(
+    "<b>%{x}</b><br>",
+    "Average Traffic Volume: %{y:.0f}",
+    "<extra></extra>"
+  )
+) %>%
+  layout(
+    title = "Average Traffic Volume by Weekday",
+    xaxis = list(title = "Weekday"),
+    yaxis = list(title = "Average Traffic Volume")
+  )
+```
+
+```
+## Warning: Ignoring 1 observations
+```
+
+```{=html}
+<div class="plotly html-widget html-fill-item" id="htmlwidget-47be60f0b4d5ab22497d" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-47be60f0b4d5ab22497d">{"x":{"visdat":{"15e818be7ce9":["function () ","plotlyVisDat"]},"cur_data":"15e818be7ce9","attrs":{"15e818be7ce9":{"x":{},"y":{},"hovertemplate":"<b>%{x}<\/b><br> Average Traffic Volume: %{y:.0f} <extra><\/extra>","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Average Traffic Volume by Weekday","xaxis":{"domain":[0,1],"automargin":true,"title":"Weekday","type":"category","categoryorder":"array","categoryarray":["Sun","Mon","Tue","Wed","Thu","Fri","Sat"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"Average Traffic Volume"},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],"y":[2410.9362864077671,3426.2964438542126,3622.2550427872861,3716.0459822101611,3765.6693190512624,3785.4239877769292,2841.4788258676044],"hovertemplate":["<b>%{x}<\/b><br> Average Traffic Volume: %{y:.0f} <extra><\/extra>","<b>%{x}<\/b><br> Average Traffic Volume: %{y:.0f} <extra><\/extra>","<b>%{x}<\/b><br> Average Traffic Volume: %{y:.0f} <extra><\/extra>","<b>%{x}<\/b><br> Average Traffic Volume: %{y:.0f} <extra><\/extra>","<b>%{x}<\/b><br> Average Traffic Volume: %{y:.0f} <extra><\/extra>","<b>%{x}<\/b><br> Average Traffic Volume: %{y:.0f} <extra><\/extra>","<b>%{x}<\/b><br> Average Traffic Volume: %{y:.0f} <extra><\/extra>"],"type":"bar","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+```
 
 ### Interpretation
 
@@ -215,10 +253,7 @@ ggplot(weather_traffic,
   theme_minimal()
 ```
 
-
-<img src="../Figures/Avg_Traffic_Volume_by_Weather.png" width="80%" style="display: block; margin: auto;" />
-
-![](Project1_analysis_data_viz_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
+![](Rocher-Hernandez_project_01_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
 
 ### Interpretation
 

@@ -3,6 +3,7 @@ title: "Data Visualization - Mini-Project 1"
 author: "Antonio Rocher-Hernandez `arocherhernandez132@floridapoly.edu`"
 output:
   html_document:
+    keep_md: true
     df_print: paged
 ---
 
@@ -85,19 +86,29 @@ It appears that traffic volume increases during the morning and reaches the maxi
 # Graph 2: Traffic Volume by Weekday
 
 ```{r}
+library(dplyr)
+library(plotly)
+
 weekday_traffic <- traffic %>%
   group_by(weekday) %>%
-  summarize(avg_traffic = mean(traffic_volume))
+  summarize(avg_traffic = mean(traffic_volume, na.rm = TRUE))
 
-ggplot(weekday_traffic,
-       aes(weekday, avg_traffic)) +
-  geom_col() +
-  labs(
+plot_ly(
+  data = weekday_traffic,
+  x = ~weekday,
+  y = ~avg_traffic,
+  type = "bar",
+  hovertemplate = paste(
+    "<b>%{x}</b><br>",
+    "Average Traffic Volume: %{y:.0f}",
+    "<extra></extra>"
+  )
+) %>%
+  layout(
     title = "Average Traffic Volume by Weekday",
-    x = "Weekday",
-    y = "Average Traffic Volume"
-  ) +
-  theme_minimal()
+    xaxis = list(title = "Weekday"),
+    yaxis = list(title = "Average Traffic Volume")
+  )
 ```
 
 ### Interpretation
